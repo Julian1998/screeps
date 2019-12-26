@@ -1,3 +1,5 @@
+var _this = this;
+
 var spawner = {
 
   /** @param {int} numberOfHarvesters **/
@@ -7,9 +9,9 @@ var spawner = {
     var spawn = Game.spawns['Spawn1'];
     var body = [WORK,CARRY,MOVE];
 
-    spawn('harvester', numberOfHarvesters, spawn, body);
-    spawn('upgrader', numberOfUpgraders, spawn, body);
-    spawn('builder', numberOfBuilders, spawn, body);
+    _this.spawn('harvester', numberOfHarvesters, spawn, body);
+    _this.spawn('upgrader', numberOfUpgraders, spawn, body);
+    _this.spawn('builder', numberOfBuilders, spawn, body);
 
     //Visualize
     if (spawn.spawning) {
