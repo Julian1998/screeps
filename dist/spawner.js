@@ -1,44 +1,42 @@
-var _this = this;
-
 var spawner = {
 
   /** @param {int} numberOfHarvesters **/
   /** @param {int} numberOfUpgraders **/
   /** @param {int} numberOfBuilders **/
   run: function (numberOfHarvesters, numberOfUpgraders, numberOfBuilders) {
-    var spawn = Game.spawns['Spawn1'];
+    var spawner = Game.spawns['Spawn1'];
     var body = [WORK,CARRY,MOVE];
 
-    _this.spawn('harvester', numberOfHarvesters, spawn, body);
-    _this.spawn('upgrader', numberOfUpgraders, spawn, body);
-    _this.spawn('builder', numberOfBuilders, spawn, body);
+    module.exports.spawn('harvester', numberOfHarvesters, spawner, body);
+    module.exports.spawn('upgrader', numberOfUpgraders, spawner, body);
+    module.exports.spawn('builder', numberOfBuilders, spawner, body);
 
     //Visualize
-    if (spawn.spawning) {
-      var spawningCreep = Game.creeps[spawn.spawning.name];
-      spawn.room.visual.text(
+    if (spawner.spawning) {
+      var spawningCreep = Game.creeps[spawner.spawning.name];
+      spawner.room.visual.text(
         '🛠️' + spawningCreep.memory.role,
-        spawn.pos.x + 1,
-        spawn.pos.y,
+        spawner.pos.x + 1,
+        spawner.pos.y,
         {align: 'left', opacity: 0.8});
+    }
+  },
+
+  //Spawns a creeper
+  /** @param {String} role **/
+  /** @param {int} number **/
+  /** @param {object} spawn **/
+  /** @param {array} body **/
+  spawn: function (role, number, spawn, body) {
+    var creeps = _.filter(Game.creeps, (creep) => creep.memory.role == role);
+
+    if (creeps.length < number) {
+      var newName = role + Game.time;
+      console.log('Spawning new ' + role + ': ' + newName);
+      spawn.spawnCreep(body, newName,
+        {memory: {role: role}});
     }
   }
 };
-
-//Spawns a creeper
-/** @param {String} role **/
-/** @param {int} number **/
-/** @param {object} spawn **/
-/** @param {array} body **/
-function spawn(role, number, spawn, body) {
-  var creeps = _.filter(Game.creeps, (creep) => creep.memory.role == role);
-
-  if (creeps.length < number) {
-    var newName = role + Game.time;
-    console.log('Spawning new ' + role + ': ' + newName);
-    spawn.spawnCreep(body, newName,
-      {memory: {role: role}});
-  }
-}
 
 module.exports = spawner;
