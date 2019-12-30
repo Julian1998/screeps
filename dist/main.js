@@ -3,6 +3,7 @@ var roleUpgrader = require('roleUpgrader');
 var roleBuilder = require('roleBuilder')
 var spawner = require('spawner');
 var memoryManager = require('memoryManager');
+var roadBuilder = require('roadBuilder');
 
 module.exports.loop = function () {
   //Constants
@@ -12,6 +13,9 @@ module.exports.loop = function () {
 
   //Run memory updater/cleaner
   memoryManager.run();
+
+  //build roads
+  roadBuilder.run('Spawn1');
 
   //Spawn creeps if needed
   spawner.run(harvesters, upgraders, builders);
