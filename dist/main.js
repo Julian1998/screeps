@@ -18,18 +18,6 @@ module.exports.loop = function () {
     });
   }
 
-  //Update source memory
-  for(var name in Memory.creeps) {
-    var creep = Game.creeps[name];
-    if(creep && creep.ticksToLive == 1) {
-      Memory.sources.forEach((source) => {
-        if(source.sourceId == creep.sourceId) {
-          source.number -= 1;
-        }
-      });
-    }
-  }
-
   //Spawn creeps if needed
   spawner.run(harvesters, upgraders, builders);
 
@@ -50,6 +38,13 @@ module.exports.loop = function () {
   //Clear unnused memory
   for(var name in Memory.creeps) {
     if(!Game.creeps[name]) {
+      //Update sources before clearing
+      Memory.sources.forEach((source) => {
+        if(source.sourceId == Memory.creeps[name].sourceId) {
+          source.number--;
+        }
+      });
+      //clear
       delete Memory.creeps[name];
       console.log('Clearing non-existing creep memory:', name);
     }
