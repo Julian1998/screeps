@@ -28,7 +28,7 @@ module.exports.loop = function () {
         }
       });
     }
-  });
+  }
 
   //Spawn creeps if needed
   spawner.run(harvesters, upgraders, builders);
