@@ -5,8 +5,8 @@ var spawner = {
   /** @param {int} numberOfBuilders **/
   run: function (numberOfHarvesters, numberOfUpgraders, numberOfBuilders) {
     var spawner = Game.spawns['Spawn1'];
-    var body = [WORK,CARRY,MOVE];
-    var energyNeeded = 200;
+    var body = [WORK,WORK,CARRY,CARRY,MOVE,MOVE];
+    var energyNeeded = 400;
 
     if(spawner.room.energyAvailable < energyNeeded) {
       return;
@@ -55,8 +55,7 @@ var spawner = {
     });
     var sourceId = sources[0].sourceId;
     sources[0].number += 1;
-    var options = {memory: {role: role, sourceId: sourceId}};
-    spawn.spawnCreep(body, newName, options);
+    spawn.spawnCreep(body, newName, {memory: {role: role, sourceId: sourceId}});
   }
 };
 
