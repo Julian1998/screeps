@@ -5,15 +5,25 @@ var spawner = {
   /** @param {int} numberOfBuilders **/
   run: function (numberOfHarvesters, numberOfUpgraders, numberOfBuilders) {
     var spawner = Game.spawns['Spawn1'];
-    var body = [WORK,WORK,CARRY,CARRY,MOVE,MOVE];
+    var body = [WORK,CARRY,MOVE];
+    var energyNeeded = 200;
 
-    if(spawner.room.energyAvailable < 400) {
+    if(spawner.room.energyAvailable < energyNeeded) {
       return;
     }
 
-    module.exports.spawn('harvester', numberOfHarvesters, spawner, body);
-    module.exports.spawn('upgrader', numberOfUpgraders, spawner, body);
-    module.exports.spawn('builder', numberOfBuilders, spawner, body);
+    var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
+    var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
+    var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
+    if(harvesters.length < numberOfHarvesters) {
+      module.exports.spawn('harvester', spawner, body);
+    }
+    else if(upgraders.length < numberOfUpgraders) {
+      module.exports.spawn('upgrader', spawner, body);
+    }
+    else if( builders.length < numberOfBuilders) {
+      module.exports.spawn('builder', spawner, body);
+    }
 
     //Visualize
     if (spawner.spawning) {
@@ -28,30 +38,25 @@ var spawner = {
 
   //Spawns a creeper
   /** @param {String} role **/
-  /** @param {int} number **/
   /** @param {object} spawn **/
   /** @param {array} body **/
-  spawn: function (role, number, spawn, body) {
-    var creeps = _.filter(Game.creeps, (creep) => creep.memory.role == role);
-
-    if (creeps.length < number) {
-      var newName = role + Game.time;
-      console.log('Spawning new ' + role + ': ' + newName);
-      var sources = Memory.sources;
-      sources.sort((a, b) => {
-        if (a.number < b.number ){
-          return -1;
-        }
-        if (a.number > b.number){
-          return 1;
-        }
-        return 0;
-      });
-      var sourceId = sources[0].sourceId;
-      sources[0].number += 1;
-      var options = {memory: {role: role, sourceId: sourceId}};
-      spawn.spawnCreep(body, newName, options);
-    }
+  spawn: function (role, spawn, body) {
+    var newName = role + Game.time;
+    console.log('Spawning new ' + role + ': ' + newName);
+    var sources = Memory.sources;
+    sources.sort((a, b) => {
+      if (a.number < b.number ){
+        return -1;
+      }
+      if (a.number > b.number){
+        return 1;
+      }
+      return 0;
+    });
+    var sourceId = sources[0].sourceId;
+    sources[0].number += 1;
+    var options = {memory: {role: role, sourceId: sourceId}};
+    spawn.spawnCreep(body, newName, options);
   }
 };
 

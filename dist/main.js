@@ -9,7 +9,7 @@ module.exports.loop = function () {
   const upgraders = 3;
   const builders = 2;
 
-  //create memory source instance if neccessary
+  //create memory source instance if neccessary, otherwise update
   if(!Memory.sources) {
     var sources = Game.spawns["Spawn1"].room.find(FIND_SOURCES);
     Memory.sources = [];
@@ -17,6 +17,17 @@ module.exports.loop = function () {
       Memory.sources.push({sourceId: source.id, number: 0});
     });
   }
+
+  //Update source memory
+  Game.creeps.forEach((creep) => {
+    if(creep.ticksToLive == 1) {
+      Memory.sources.forEach((source) => {
+        if(source.sourceId == creep.sourceId) {
+          source.number -= 1;
+        }
+      });
+    }
+  });
 
   //Spawn creeps if needed
   spawner.run(harvesters, upgraders, builders);
