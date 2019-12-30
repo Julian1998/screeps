@@ -19,8 +19,9 @@ module.exports.loop = function () {
   }
 
   //Update source memory
-  Game.creeps.forEach((creep) => {
-    if(creep.ticksToLive == 1) {
+  for(var name in Memory.creeps) {
+    var creep = Game.creeps[name];
+    if(creep && creep.ticksToLive == 1) {
       Memory.sources.forEach((source) => {
         if(source.sourceId == creep.sourceId) {
           source.number -= 1;
