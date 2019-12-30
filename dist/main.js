@@ -5,9 +5,18 @@ var spawner = require('spawner');
 
 module.exports.loop = function () {
   //Constants
-  const harvesters = 2;
-  const upgraders = 2;
-  const builders = 1;
+  const harvesters = 3;
+  const upgraders = 3;
+  const builders = 2;
+
+  //create memory source instance if neccessary
+  if(!Memory.sources) {
+    var sources = Game.spawns["Spawn1"].room.find(FIND_SOURCES);
+    Memory.sources = [];
+    sources.forEach((source) => {
+      Memory.sources.push({sourceId: source.id, number: 0});
+    });
+  }
 
   //Spawn creeps if needed
   spawner.run(harvesters, upgraders, builders);
