@@ -25,7 +25,9 @@ var roleBuilder = {
             filter: (structure) => structure.hits < structure.hitsMax
         });
         if(damagedTarget) {
-          creep.repair(damagedTarget);
+          if(creep.repair(damagedTarget) == ERR_NOT_IN_RANGE) {
+              creep.moveTo(damagedTarget, {visualizePathStyle: {stroke: '#ffaa00'}});
+          }
         }
         else {
           creep.moveTo(Game.spawns["Spawn1"].pos);
